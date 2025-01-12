@@ -45,6 +45,7 @@ public class BookDetailsApp extends Application {
 
         TableColumn<Book, String> descriptionColumn = new TableColumn<>("Description");
         descriptionColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDescription()));
+        descriptionColumn.setPrefWidth(500);
 
 
         bookTable.getColumns().addAll(titleColumn, genreColumn, authorColumn, descriptionColumn);
