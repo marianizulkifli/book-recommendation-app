@@ -12,39 +12,39 @@ import javafx.stage.Stage;
 public class Login extends Application {
     @Override
     public void start(Stage stage) {
-        // Create the root layout
+        // Layout
         VBox root = new VBox(20);
         root.setAlignment(Pos.CENTER);
-        root.setStyle("-fx-background-color: #C8A2C8;"); // Purple background
+        root.setStyle("-fx-background-color: #9370DB;"); // Purple background
 
-        // Add the image (replace with your image file path)
-        Image capybaraImage = new Image("file:path_to_your_image/capybara.png"); // Update file path
-        ImageView imageView = new ImageView(capybaraImage);
+        // Add the image
+        Image image = new Image("file:C:\\Users\\hanisss\\eclipse-workspace\\Project\\src\\application\\capybara.png");
+        ImageView imageView = new ImageView(image);
         imageView.setFitWidth(150);
         imageView.setFitHeight(150);
 
-        // Add the "User Login" label
-        Label titleLabel = new Label("USER LOGIN");
-        titleLabel.setFont(new Font("Arial", 24));
+        // Title label
+        Label titleLabel = new Label("WELCOME!");
+        titleLabel.setFont(new Font("Helvetica", 20));
         titleLabel.setTextFill(Color.BLACK);
 
-        // Create the username field
+        // Username field
         TextField usernameField = new TextField();
-        usernameField.setPromptText("username");
+        usernameField.setPromptText("Username");
         usernameField.setPrefWidth(200);
 
-        // Create the password field
+        // Password field
         PasswordField passwordField = new PasswordField();
-        passwordField.setPromptText("password");
+        passwordField.setPromptText("Password");
         passwordField.setPrefWidth(200);
 
-        // Add "Forgot Password?" link
+        // "Forgot Password?" link
         Hyperlink forgotPassword = new Hyperlink("Forgot password?");
         forgotPassword.setStyle("-fx-text-fill: #4B0082; -fx-font-size: 12;");
 
-        // Add the login button
+        // Login button
         Button loginButton = new Button("Login");
-        loginButton.setStyle("-fx-background-color: #9370DB; -fx-text-fill: white;");
+        loginButton.setStyle("-fx-background-color: #C8A2C8; -fx-text-fill: white;");
         loginButton.setPrefWidth(150);
         loginButton.setOnAction(e -> {
 			Dashboard dashboard = new Dashboard();
@@ -60,7 +60,7 @@ public class Login extends Application {
 
         // Create the scene
         Scene scene = new Scene(root, 400, 500);
-        stage.setTitle("Book Recommendation");
+        stage.setTitle("Book Recommendation App");
         stage.setScene(scene);
         stage.show();
     }
