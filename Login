@@ -59,7 +59,7 @@ public class Login extends Application {
         root.getChildren().addAll(imageView, titleLabel, usernameField, passwordField, forgotPassword, loginButton);
 
         // Create the scene
-        Scene scene = new Scene(root, 400, 500);
+        Scene scene = new Scene(root, 400, 600);
         stage.setTitle("Book Recommendation App");
         stage.setScene(scene);
         stage.show();
