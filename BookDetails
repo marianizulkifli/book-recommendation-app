@@ -1,0 +1,159 @@
+import javafx.application.Application;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.stage.Stage;
+
+
+public class BookDetailsApp extends Application {
+
+    @Override
+    public void start(Stage Stage) {
+
+        //  input fields
+        TextField titleField = new TextField();
+        titleField.setPromptText("Title");
+
+        TextField genreField = new TextField();
+        genreField.setPromptText("Genre");
+
+        TextField authorField = new TextField();
+        authorField.setPromptText("Author");
+
+        TextField descField = new TextField();
+        descField.setPromptText("Description");
+
+        // buttons
+        Button addButton = new Button("Add");
+        Button removeButton = new Button("Remove");
+        Button editButton = new Button("Edit");
+        Button homeButton = new Button("Home");
+
+        // table for book list
+        TableView<Book> bookTable = new TableView<>();
+
+        // create columns
+        TableColumn<Book, String> titleColumn = new TableColumn<>("Title");
+        titleColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getTitle()));
+
+        TableColumn<Book, String> genreColumn = new TableColumn<>("Genre");
+        genreColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getGenre()));
+
+        TableColumn<Book, String> authorColumn = new TableColumn<>("Author");
+        authorColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getAuthor()));
+
+        TableColumn<Book, String> descriptionColumn = new TableColumn<>("Description");
+        descriptionColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDescription()));
+
+
+        bookTable.getColumns().addAll(titleColumn, genreColumn, authorColumn, descriptionColumn);
+
+        // Function for add button
+        addButton.setOnAction(e -> {
+            String title = titleField.getText();
+            String genre = genreField.getText();
+            String author = authorField.getText();
+            String description = descField.getText();
+
+            if (!title.isEmpty() && !genre.isEmpty() && !author.isEmpty() && !description.isEmpty()) {
+                // Add a new book to the table
+                bookTable.getItems().add(new Book(title, genre, author, description));
+
+                // Clearing input fields
+                titleField.clear();
+                genreField.clear();
+                authorField.clear();
+                descField.clear();
+            } else {
+                showAlert("Error", "Please fill in all fields!");
+            }
+        });
+
+        // Function for remove button
+        removeButton.setOnAction(e -> {
+            Book selectedBook = bookTable.getSelectionModel().getSelectedItem();
+            if (selectedBook != null) {
+                bookTable.getItems().remove(selectedBook); // Remove the selected book from the table
+            } else {
+                showAlert("Error", "No book selected!");
+            }
+        });
+
+        // Function for edit button
+        editButton.setOnAction(e -> {
+            Book selectedBook = bookTable.getSelectionModel().getSelectedItem();
+            if (selectedBook != null) {
+                // Populate the input fields with the selected book's data
+                titleField.setText(selectedBook.getTitle());
+                genreField.setText(selectedBook.getGenre());
+                authorField.setText(selectedBook.getAuthor());
+                descField.setText(selectedBook.getDescription());
+
+                // Remove selected book
+                bookTable.getItems().remove(selectedBook);
+            } else {
+                showAlert("Error", "No book selected!");
+            }
+        });
+
+        // Layout
+        VBox inputFields = new VBox(10, titleField, genreField, authorField, descField, addButton);
+        inputFields.setStyle("-fx-padding: 10;");
+
+        HBox actionButtons = new HBox(10, homeButton, removeButton, editButton);
+        actionButtons.setStyle("padding: 10; alignment: center;");
+
+        VBox mainLayout = new VBox(10, new Label("BOOK DETAILS"), inputFields, bookTable, actionButtons);
+        mainLayout.setStyle("-fx-padding: 20; -fx-alignment: center; -fx-background-color: #d4c5f9;");
+
+        // Scene and Stage
+        Scene scene = new Scene(mainLayout, 400, 600);
+        Stage.setScene(scene);
+        Stage.setTitle("Book Details");
+        Stage.show();
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+
+    //  storing data in table
+    public static class Book {
+        private final String title;
+        private final String genre;
+        private final String author;
+        private final String description;
+
+        public Book(String title, String genre, String author, String description) {
+            this.title = title;
+            this.genre = genre;
+            this.author = author;
+            this.description = description;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public String getGenre() {
+            return genre;
+        }
+
+        public String getAuthor() {
+            return author;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+    }
+}
