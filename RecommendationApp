@@ -93,10 +93,10 @@ public class RecommendationApp extends Application {
         Button searchByAuthorButton = new Button("Search by Author");
         Button searchByGenreButton = new Button("Search by Genre");
         Button addBookButton = new Button("Add Book");
-        VBox dashboardLayout = new VBox(20, dashboardLabel, searchByAuthorButton, searchByGenreButton, addBookButton);
+        VBox dashboardLayout = new VBox(10, dashboardLabel, searchByAuthorButton, searchByGenreButton, addBookButton);
         dashboardLayout.setPadding(new Insets(20));
         dashboardLayout.setStyle("-fx-background-color: #9A7DFF; -fx-alignment: center;");
-        Scene dashboardScene = new Scene(dashboardLayout, 400, 300);
+        Scene dashboardScene = new Scene(dashboardLayout, 400, 500);
 
         // Search by Author Page
         Label authorLabel = new Label("Select Author:");
@@ -108,7 +108,7 @@ public class RecommendationApp extends Application {
         VBox authorLayout = new VBox(10, authorLabel, authorComboBox, authorSearchButton, authorBookListView, authorBackButton);
         authorLayout.setPadding(new Insets(20));
         authorLayout.setStyle("-fx-background-color: #9A7DFF;");
-        Scene authorScene = new Scene(authorLayout, 600, 400);
+        Scene authorScene = new Scene(authorLayout, 400, 500);
 
         // Search by Genre Page
         Label genreLabel = new Label("Select Genre:");
@@ -120,7 +120,7 @@ public class RecommendationApp extends Application {
         VBox genreLayout = new VBox(10, genreLabel, genreComboBox, genreSearchButton, genreBookListView, genreBackButton);
         genreLayout.setPadding(new Insets(20));
         genreLayout.setStyle("-fx-background-color: #9A7DFF;");
-        Scene genreScene = new Scene(genreLayout, 600, 400);
+        Scene genreScene = new Scene(genreLayout, 400, 500);
 
         // Add Book Page
         Label titleLabel = new Label("Title:");
