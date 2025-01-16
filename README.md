@@ -17,11 +17,5 @@ To achieve this, the project has outlined the following objectives:
 
 
 //Instructions for running the application
-1. User are required to log in by entering their username and password and will be navigate to dashboard
-2. User then able to find the books by choosing genre or author.
-3. Add books at dashboard here are for reference. Admin can add book details but not for user reference.
-5. At genre page, user can type their favourite book and the list view will be filtered dynamically based on what user type
-6. By click the view button, user will receive personalized recommendations which the book will be filtered and listed according to the selected genre.
-7. Same at author page, by click the view button, user will receive personalized recommendations which the book will be filtered and listed according to the selected author.
-8. user can also added the book listed as their favourite.
+
 
