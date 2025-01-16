@@ -17,5 +17,7 @@ To achieve this, the project has outlined the following objectives:
 
 
 //Instructions for running the application
-
+1. Extract files from the ZIP.
+2. Open recommendationApp file
+3. Run the code using tools like intelliJ for the result
 
