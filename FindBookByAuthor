@@ -1,91 +1,44 @@
 package com.example.demo1;
 
-import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
-public class FindBookByAuthor extends Application {
+import java.util.List;
+import java.util.Map;
 
-    @Override
-    public void start(Stage primaryStage) {
-        primaryStage.setTitle("Find Book By Author");
+public class FindBooksByAuthor {
 
-        // Root layout
-        VBox root = new VBox(20);
-        root.setPadding(new Insets(20));
-        root.setAlignment(Pos.CENTER);
-        root.setStyle("-fx-background-color: #9370DB;");
+    private final Map<String, List<String>> booksByAuthor;
 
-        // Title
-        Label titleLabel = new Label("FIND BOOK BY AUTHOR");
-        titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 15));
-        titleLabel.setTextFill(Color.BLACK);
+    public FindBooksByAuthor(Map<String, List<String>> booksByAuthor) {
+        this.booksByAuthor = booksByAuthor;
+    }
 
-        // Search bar
-        HBox searchBox = new HBox(10);
-        searchBox.setAlignment(Pos.CENTER);
-        searchBox.setStyle("-fx-background-color: #e9e1f9; -fx-background-radius: 10;");
-        searchBox.setPadding(new Insets(10));
+    public Scene createAuthorScene(Stage primaryStage, Scene dashboardScene, RecommendationApp app) {
+        Label authorLabel = new Label("Select Author:");
+        ComboBox<String> authorComboBox = new ComboBox<>();
+        authorComboBox.getItems().addAll(booksByAuthor.keySet());
 
-        TextField searchField = new TextField();
-        searchField.setPromptText("Search for an author");
-        searchField.setStyle("-fx-background-color: #e9e1f9; -fx-background-radius: 10;");
+        Button authorSearchButton = new Button("Search");
+        ListView<HBox> authorBookListView = new ListView<>();
+        Button authorBackButton = new Button("Home");
 
-        Button searchButton = new Button("🔍");
-        searchButton.setStyle("-fx-background-color: transparent;");
+        VBox authorLayout = new VBox(10, authorLabel, authorComboBox, authorSearchButton, authorBookListView, authorBackButton);
+        authorLayout.setPadding(new Insets(20));
+        authorLayout.setStyle("-fx-background-color: #9A7DFF;");
 
-        searchBox.getChildren().addAll(searchButton, searchField);
-
-        // Genre list
-        ObservableList<String> genres = FXCollections.observableArrayList(
-                "William Shakespeare", "Stephen King", "George Orwell", "Lewis Carroll", "James Joyce", "Dr. Seuss", "Albert Camus"
-        );
-
-        ListView<String> genreList = new ListView<>(genres);
-        genreList.setStyle("-fx-background-color: #e9e1f9; -fx-background-radius: 10;");
-
-        // Add listener to the search field
-        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            ObservableList<String> filteredGenres = FXCollections.observableArrayList();
-            for (String genre : genres) {
-                if (genre.toLowerCase().contains(newValue.toLowerCase())) {
-                    filteredGenres.add(genre);
-                }
+        authorSearchButton.setOnAction(e -> {
+            String selectedAuthor = authorComboBox.getValue();
+            if (selectedAuthor != null) {
+                List<HBox> items = app.createBookItems(booksByAuthor.get(selectedAuthor));
+                authorBookListView.getItems().setAll(items);
             }
-            genreList.setItems(filteredGenres);
         });
 
-        // Buttons
-        HBox buttonBox = new HBox(20);
-        buttonBox.setAlignment(Pos.CENTER);
+        authorBackButton.setOnAction(e -> primaryStage.setScene(dashboardScene));
 
-        Button homeButton = new Button("Home");
-        Button viewButton = new Button("View");
-        homeButton.setStyle("-fx-background-color: #e9e1f9; -fx-background-radius: 10;");
-        viewButton.setStyle("-fx-background-color: #e9e1f9; -fx-background-radius: 10;");
-
-        buttonBox.getChildren().addAll(homeButton, viewButton);
-
-        // Add all elements to root
-        root.getChildren().addAll(titleLabel, searchBox, genreList, buttonBox);
-
-        // Set the scene
-        Scene scene = new Scene(root, 300, 500);
-        primaryStage.setScene(scene);
-        primaryStage.show();
-    }
-
-    public static void main(String[] args) {
-        launch(args);
+        return new Scene(authorLayout, 400, 500);
     }
 }
-
