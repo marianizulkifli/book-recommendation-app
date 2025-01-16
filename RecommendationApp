@@ -1,4 +1,5 @@
-package com.example.recommendationapp;
+package org.example.recommendationapp;
+
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -13,6 +14,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.beans.property.SimpleStringProperty;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -84,16 +86,16 @@ public class RecommendationApp extends Application {
         // Set the scene and show the stage
         Scene loginScene = new Scene(loginLayout, 400, 500);
         primaryStage.setScene(loginScene);
-        primaryStage.setTitle("Book Recommendation App");
+        primaryStage.setTitle("CapyBook");
         primaryStage.show();
 
         // Dashboard
-        Label dashboardLabel = new Label("Welcome to Book Recommendation App!");
+        Label dashboardLabel = new Label("Welcome to CapyBook!");
         dashboardLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
         Button searchByGenreButton = createButton("Genre", "file:C:\\genreicon.png");
-         Button searchByAuthorButton = createButton("Author", "file:C:\\authoricon.png");
+        Button searchByAuthorButton = createButton("Author", "file:C:\\authoricon.png");
         Button addBookButton = createButton("Add Book", "file:C:\\bookicon.png");
-        VBox dashboardLayout = new VBox(10, dashboardLabel, searchByGenreButton, searchByAuthorButton,  addBookButton);
+        VBox dashboardLayout = new VBox(10, dashboardLabel, searchByGenreButton, searchByAuthorButton, addBookButton);
         dashboardLayout.setPadding(new Insets(20));
         dashboardLayout.setStyle("-fx-background-color: #9A7DFF; -fx-alignment: center;");
         Scene dashboardScene = new Scene(dashboardLayout, 400, 500);
@@ -104,7 +106,7 @@ public class RecommendationApp extends Application {
         authorComboBox.getItems().addAll(booksByAuthor.keySet());
         Button authorSearchButton = new Button("Search");
         ListView<HBox> authorBookListView = new ListView<>();
-        Button authorBackButton = new Button("Back to Dashboard");
+        Button authorBackButton = new Button("Home");
         VBox authorLayout = new VBox(10, authorLabel, authorComboBox, authorSearchButton, authorBookListView, authorBackButton);
         authorLayout.setPadding(new Insets(20));
         authorLayout.setStyle("-fx-background-color: #9A7DFF;");
@@ -116,27 +118,57 @@ public class RecommendationApp extends Application {
         genreComboBox.getItems().addAll(booksByGenre.keySet());
         Button genreSearchButton = new Button("Search");
         ListView<HBox> genreBookListView = new ListView<>();
-        Button genreBackButton = new Button("Back to Dashboard");
+        Button genreBackButton = new Button("Home");
         VBox genreLayout = new VBox(10, genreLabel, genreComboBox, genreSearchButton, genreBookListView, genreBackButton);
         genreLayout.setPadding(new Insets(20));
         genreLayout.setStyle("-fx-background-color: #9A7DFF;");
         Scene genreScene = new Scene(genreLayout, 400, 500);
 
         // Add Book Page
-        Label titleLabel = new Label("Title:");
         TextField titleField = new TextField();
-        Label genreInputLabel = new Label("Genre:");
-        TextField genreInputField = new TextField();
-        Label authorInputLabel = new Label("Author:");
-        TextField authorInputField = new TextField();
-        Label descriptionLabel = new Label("Description:");
-        TextArea descriptionArea = new TextArea();
-        Button saveBookButton = new Button("Save Book");
-        Button addBookBackButton = new Button("Back to Dashboard");
-        VBox addBookLayout = new VBox(10, titleLabel, titleField, genreInputLabel, genreInputField, authorInputLabel, authorInputField, descriptionLabel, descriptionArea, saveBookButton, addBookBackButton);
-        addBookLayout.setPadding(new Insets(20));
-        addBookLayout.setStyle("-fx-background-color: #9A7DFF;");
-        Scene addBookScene = new Scene(addBookLayout, 400, 500);
+        titleField.setPromptText("Title");
+        TextField genreField = new TextField();
+        genreField.setPromptText("Genre");
+        TextField authorField = new TextField();
+        authorField.setPromptText("Author");
+        TextField descriptionField = new TextField();
+        descriptionField.setPromptText("Description");
+
+        Button addButton = new Button("Add");
+        Button homeButton = new Button("Home");
+        Button removeButton = new Button("Remove");
+        Button editButton = new Button("Edit");
+
+        // table for book list
+        TableView<Book> bookTable = new TableView<>();
+
+        // columns
+        TableColumn<Book, String> titleColumn = new TableColumn<>("Title");
+        titleColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getTitle()));
+
+        TableColumn<Book, String> genreColumn = new TableColumn<>("Genre");
+        genreColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getGenre()));
+
+        TableColumn<Book, String> authorColumn = new TableColumn<>("Author");
+        authorColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getAuthor()));
+
+        TableColumn<Book, String> descriptionColumn = new TableColumn<>("Description");
+        descriptionColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDescription()));
+
+
+        bookTable.getColumns().addAll(titleColumn, genreColumn, authorColumn, descriptionColumn);
+
+
+        VBox inputFields = new VBox(10, titleField, genreField, authorField, descriptionField, addButton);
+        inputFields.setStyle("-fx-padding: 10;");
+
+        HBox actionButtons = new HBox(10, removeButton, editButton, homeButton);
+        actionButtons.setStyle("-fx-padding: 10; -fx-alignment: center ");
+
+        VBox mainLayout = new VBox(10, new Label("BOOK DETAILS"), inputFields, bookTable, actionButtons);
+        mainLayout.setStyle("-fx-padding: 20; -fx-alignment: center; -fx-background-color: #9A7DFF;");
+
+        Scene addBookScene = new Scene(mainLayout, 400, 500);
 
         // Event Handlers
         loginButton.setOnAction(e -> {
@@ -171,30 +203,100 @@ public class RecommendationApp extends Application {
         });
         genreBackButton.setOnAction(e -> primaryStage.setScene(dashboardScene));
 
-        saveBookButton.setOnAction(e -> {
+        //booklist function
+        addButton.setOnAction(e -> {
             String newTitle = titleField.getText();
-            String newGenre = genreInputField.getText();
-            String newAuthor = authorInputField.getText();
-            String newDescription = descriptionArea.getText();
+            String newGenre = genreField.getText();
+            String newAuthor = authorField.getText();
+            String newDescription = descriptionField.getText();
 
             if (!newTitle.isEmpty() && !newGenre.isEmpty() && !newAuthor.isEmpty()) {
                 booksByAuthor.computeIfAbsent(newAuthor, k -> new ArrayList<>()).add(newTitle);
                 booksByGenre.computeIfAbsent(newGenre, k -> new ArrayList<>()).add(newTitle);
-                bookDetails.put(newTitle, new String[]{newGenre, newAuthor, newDescription});
+
+                bookTable.getItems().add(new Book(newTitle, newGenre, newAuthor, newDescription));
                 titleField.clear();
-                genreInputField.clear();
-                authorInputField.clear();
-                descriptionArea.clear();
-                primaryStage.setScene(dashboardScene);
+                genreField.clear();
+                authorField.clear();
+                descriptionField.clear();
+
+            }
+        });
+        // Function for remove button
+        removeButton.setOnAction(e -> {
+            Book selectedBook = bookTable.getSelectionModel().getSelectedItem();
+            if (selectedBook != null) {
+                bookTable.getItems().remove(selectedBook); // Remove the selected book from the table
+            } else {
+                showAlert("Error", "No book selected!");
+            }
+        });
+        // Function for edit button
+        editButton.setOnAction(e -> {
+            Book selectedBook = bookTable.getSelectionModel().getSelectedItem();
+            if (selectedBook != null) {
+                // Populate the input fields with the selected book's data
+                titleField.setText(selectedBook.getTitle());
+                genreField.setText(selectedBook.getGenre());
+                authorField.setText(selectedBook.getAuthor());
+                descriptionField.setText(selectedBook.getDescription());
+
+                // Remove selected book
+                bookTable.getItems().remove(selectedBook);
+            } else {
+                showAlert("Error", "No book selected!");
             }
         });
 
-        addBookBackButton.setOnAction(e -> primaryStage.setScene(dashboardScene));
+
+        homeButton.setOnAction(e -> primaryStage.setScene(dashboardScene));
 
         // Setup Primary Stage
-        primaryStage.setTitle("Book Recommendation App");
+        primaryStage.setTitle("CapyBook");
         primaryStage.setScene(loginScene);
         primaryStage.show();
+
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    //  storing data in table
+    public static class Book {
+        private final String title;
+        private final String genre;
+        private final String author;
+        private final String description;
+
+        public Book(String title, String genre, String author, String description) {
+            this.title = title;
+            this.genre = genre;
+            this.author = author;
+            this.description = description;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public String getGenre() {
+            return genre;
+        }
+
+        public String getAuthor() {
+            return author;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+
     }
     private Button createButton(String text, String iconPath) {
         Button button = new Button(text);
@@ -305,4 +407,5 @@ public class RecommendationApp extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
 }
