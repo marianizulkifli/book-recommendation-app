@@ -1,0 +1,45 @@
+package com.example.demo1;
+
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.stage.Stage;
+
+import java.util.List;
+import java.util.Map;
+
+public class FindBooksByGenre {
+
+    private final Map<String, List<String>> booksByGenre;
+
+    public FindBooksByGenre(Map<String, List<String>> booksByGenre) {
+        this.booksByGenre = booksByGenre;
+    }
+
+    public Scene createGenreScene(Stage primaryStage, Scene dashboardScene, RecommendationApp app) {
+        Label genreLabel = new Label("Select Genre:");
+        ComboBox<String> genreComboBox = new ComboBox<>();
+        genreComboBox.getItems().addAll(booksByGenre.keySet());
+
+        Button genreSearchButton = new Button("Search");
+        ListView<HBox> genreBookListView = new ListView<>();
+        Button genreBackButton = new Button("Home");
+
+        VBox genreLayout = new VBox(10, genreLabel, genreComboBox, genreSearchButton, genreBookListView, genreBackButton);
+        genreLayout.setPadding(new Insets(20));
+        genreLayout.setStyle("-fx-background-color: #9A7DFF;");
+
+        genreSearchButton.setOnAction(e -> {
+            String selectedGenre = genreComboBox.getValue();
+            if (selectedGenre != null) {
+                List<HBox> items = app.createBookItems(booksByGenre.get(selectedGenre));
+                genreBookListView.getItems().setAll(items);
+            }
+        });
+
+        genreBackButton.setOnAction(e -> primaryStage.setScene(dashboardScene));
+
+        return new Scene(genreLayout, 400, 500);
+    }
+}
