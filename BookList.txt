@@ -1,0 +1,213 @@
+package com.example.booklistpage;
+
+import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class BookListPage extends Application {
+
+    @Override
+    public void start(Stage primaryStage) {
+        // Sample data: Books and their details
+        Map<String, String[]> booksByAuthor = new HashMap<>();
+        booksByAuthor.put("William Shakespeare", new String[]{"Hamlet", "Macbeth", "Romeo and Juliet"});
+        booksByAuthor.put("Stephen King", new String[]{"The Shining", "It", "Carrie"});
+        booksByAuthor.put("George Orwell", new String[]{"1984", "Animal Farm", "Homage to Catalonia"});
+        booksByAuthor.put("Lewis Carroll", new String[]{"Alice's Adventures in Wonderland", "Through the Looking-Glass", "The Hunting of the Snark"});
+        booksByAuthor.put("James Joyce", new String[]{"Ulysses", "A Portrait of the Artist as a Young Man", "Dubliners"});
+        booksByAuthor.put("Dr. Seuss", new String[]{"The Cat in the Hat", "Green Eggs and Ham", "How the Grinch Stole Christmas"});
+        booksByAuthor.put("Albert Camus", new String[]{"The Stranger", "The Plague", "The Fall"});
+
+        Map<String, String[]> bookDetails = new HashMap<>();
+        bookDetails.put("Hamlet", new String[]{"Historical Fiction", "William Shakespeare", "A tragedy about Prince Hamlet of Denmark."});
+        bookDetails.put("Macbeth", new String[]{"Historical Fiction", "William Shakespeare", "A story of ambition and its consequences."});
+        bookDetails.put("Romeo and Juliet", new String[]{"Romance", "William Shakespeare", "A tale of star-crossed lovers."});
+
+        bookDetails.put("The Shining", new String[]{"Horror", "Stephen King", "A family in an isolated hotel faces supernatural forces."});
+        bookDetails.put("It", new String[]{"Horror", "Stephen King", "A group of friends confront an evil entity."});
+        bookDetails.put("Carrie", new String[]{"Horror", "Stephen King", "A teenage girl unleashes telekinetic powers."});
+
+        bookDetails.put("1984", new String[]{"Science Fiction", "George Orwell", "A dystopian novel about totalitarianism."});
+        bookDetails.put("Animal Farm", new String[]{"Fantasy", "George Orwell", "A satirical allegory of communism."});
+        bookDetails.put("Homage to Catalonia", new String[]{"Historical Fiction", "George Orwell", "An account of Orwell's experiences in the Spanish Civil War."});
+
+        bookDetails.put("Alice's Adventures in Wonderland", new String[]{"Fantasy", "Lewis Carroll", "A young girl explores a magical world."});
+        bookDetails.put("Through the Looking-Glass", new String[]{"Fantasy", "Lewis Carroll", "A sequel to Alice's adventures in Wonderland."});
+        bookDetails.put("The Hunting of the Snark", new String[]{"Fantasy", "Lewis Carroll", "A nonsense poem about an impossible voyage."});
+
+        bookDetails.put("Ulysses", new String[]{"Historical Fiction", "James Joyce", "A modernist novel about a day in Dublin."});
+        bookDetails.put("A Portrait of the Artist as a Young Man", new String[]{"Historical Fiction", "James Joyce", "A semi-autobiographical novel of Joyce's early years."});
+        bookDetails.put("Dubliners", new String[]{"Historical Fiction", "James Joyce", "A collection of short stories set in Dublin."});
+
+        bookDetails.put("The Cat in the Hat", new String[]{"Fantasy", "Dr. Seuss", "A mischievous cat visits two children."});
+        bookDetails.put("Green Eggs and Ham", new String[]{"Fantasy", "Dr. Seuss", "A whimsical story about trying new things."});
+        bookDetails.put("How the Grinch Stole Christmas", new String[]{"Fantasy", "Dr. Seuss", "A tale of redemption during Christmas."});
+
+        bookDetails.put("The Stranger", new String[]{"Mystery", "Albert Camus", "A novel about existentialism and absurdity."});
+        bookDetails.put("The Plague", new String[]{"Historical Fiction", "Albert Camus", "A story about a town facing an epidemic."});
+        bookDetails.put("The Fall", new String[]{"Mystery", "Albert Camus", "A philosophical novel about guilt and judgment."});
+
+        Map<String, String> bookImages = new HashMap<>();
+        bookImages.put("Hamlet", "file:src/blimages/hamlet.jpg");
+        bookImages.put("Macbeth", "file:src/blimages/macbeth.jpg");
+        bookImages.put("Romeo and Juliet", "file:src/blimages/romeo.jpg");
+        bookImages.put("The Shining", "file:src/blimages/shining.jpg");
+        bookImages.put("It", "file:src/blimages/it.jpg");
+        bookImages.put("Carrie", "file:src/blimages/carrie.jpg");
+        bookImages.put("1984", "file:src/blimages/1984.jpg");
+        bookImages.put("Animal Farm", "file:src/blimages/animalfarm.jpg");
+        bookImages.put("Homage to Catalonia", "file:src/blimages/homage.jpg");
+        bookImages.put("Alice's Adventures in Wonderland", "file:src/blimages/alice.jpg");
+        bookImages.put("Through the Looking-Glass", "file:src/blimages/through.jpg");
+        bookImages.put("The Hunting of the Snark", "file:src/blimages/hunting.jpg");
+        bookImages.put("Ulysses", "file:src/blimages/ulysses.jpg");
+        bookImages.put("A Portrait of the Artist as a Young Man", "file:src/blimages/portrait.jpg");
+        bookImages.put("Dubliners", "file:src/blimages/dubliners.jpg");
+        bookImages.put("The Cat in the Hat", "file:src/blimages/thecat.jpg");
+        bookImages.put("Green Eggs and Ham", "file:src/blimages/greeneggs.jpg");
+        bookImages.put("How the Grinch Stole Christmas", "file:src/blimages/howthe.jpg");
+        bookImages.put("The Stranger", "file:src/blimages/thestranger.jpg");
+        bookImages.put("The Plague", "file:src/blimages/theplague.jpg");
+        bookImages.put("The Fall", "file:src/blimages/thefall.jpg");
+
+        // The author to display (this would be dynamic based on user's search)
+        String selectedAuthor = "William Shakespeare";
+
+        // Create the layout
+        BorderPane root = new BorderPane();
+        VBox contentBox = new VBox();
+        contentBox.setPadding(new Insets(15));
+        contentBox.setSpacing(10);
+        contentBox.setStyle("-fx-background-color: #9370DB;");
+
+        // Page title
+        Label pageTitle = new Label("BOOK LIST");
+        pageTitle.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: black;");
+        pageTitle.setAlignment(Pos.CENTER);
+        pageTitle.setMaxWidth(Double.MAX_VALUE);
+
+        // Label for the selected author
+        Label authorLabel = new Label("Books by " + selectedAuthor + ":");
+        authorLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+
+        // ListView to display the books with details
+        ListView<String> bookListView = new ListView<>();
+
+        // Add books of the selected author to the ListView
+        if (booksByAuthor.containsKey(selectedAuthor)) {
+            bookListView.getItems().addAll(booksByAuthor.get(selectedAuthor));
+        } else {
+            bookListView.getItems().add("No books found for this author.");
+        }
+
+        // Custom cell factory to display book details
+        bookListView.setCellFactory(lv -> new ListCell<>() {
+            private final VBox content = new VBox(5);
+            private final HBox topBox = new HBox(10);
+            private final ImageView imageView = new ImageView();
+            private final VBox detailsBox = new VBox(5);
+            private final Label titleLabel = new Label();
+            private final Label genreLabel = new Label();
+            private final Label authorLabel = new Label();
+            private final Label descriptionLabel = new Label();
+            private final Button favoriteButton = new Button("Add to Favorite");
+
+            {
+                content.setPadding(new Insets(5));
+                content.setStyle("-fx-border-color: lightgray; -fx-border-width: 1; -fx-background-color: #F5F5F5;");
+
+                imageView.setFitHeight(50);
+                imageView.setFitWidth(50);
+
+                detailsBox.getChildren().addAll(titleLabel, genreLabel, authorLabel, descriptionLabel);
+                topBox.getChildren().addAll(imageView, detailsBox, favoriteButton);
+                topBox.setAlignment(Pos.CENTER_LEFT);
+                favoriteButton.setPrefWidth(100);
+
+                content.getChildren().add(topBox);
+
+                // Static dimensions
+                detailsBox.setPrefWidth(300);
+                favoriteButton.setAlignment(Pos.CENTER);
+            }
+
+            @Override
+            protected void updateItem(String bookTitle, boolean empty) {
+                super.updateItem(bookTitle, empty);
+                if (empty || bookTitle == null) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    // Set book details
+                    titleLabel.setText("Title: " + bookTitle);
+                    String[] details = bookDetails.getOrDefault(bookTitle, new String[]{"Unknown", "Unknown", "No description available."});
+                    genreLabel.setText("Genre: " + details[0]);
+                    authorLabel.setText("Author: " + details[1]);
+                    descriptionLabel.setText("Description: " + details[2]);
+
+                    // Load book image
+                    String imageUrl = bookImages.getOrDefault(bookTitle, "file:src/blimages/default.jpg");
+                    imageView.setImage(new Image(imageUrl));
+
+                    // Favorite button action
+                    favoriteButton.setOnAction(e -> System.out.println(bookTitle + " added to favorites!"));
+
+                    setGraphic(content);
+                }
+            }
+        });
+
+        // Footer buttons
+        HBox footer = new HBox(50);
+        footer.setPadding(new Insets(20));
+        footer.setAlignment(Pos.CENTER);
+        footer.setStyle("-fx-background-color: #9370DB;");
+
+        // Create buttons
+        Button homeButton = new Button("Home");
+        Button backButton = new Button("Back");
+
+        // Style buttons (optional: adjust size and font)
+        homeButton.setStyle("-fx-font-size: 14px; -fx-pref-width: 80px;");
+        backButton.setStyle("-fx-font-size: 14px; -fx-pref-width: 80px;");
+
+        // Add components to the layout
+        contentBox.getChildren().addAll(pageTitle, authorLabel, bookListView);
+        root.setCenter(contentBox);
+        root.setBottom(footer);
+
+        // Set up the Scene and Stage
+        Scene scene = new Scene(root, 400, 600);
+        primaryStage.setTitle("Book List Page with Details");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+
+        // Button actions
+        homeButton.setOnAction(e -> System.out.println("Navigate to Home Dashboard"));
+        backButton.setOnAction(e -> System.out.println("Navigate to Search Page"));
+
+        // Add buttons to the footer
+        footer.getChildren().addAll(homeButton, backButton);
+
+        // Set footer to the bottom of the layout
+        root.setBottom(footer);
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}
