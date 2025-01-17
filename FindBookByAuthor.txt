@@ -1,0 +1,45 @@
+package com.example.demo1;
+
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.stage.Stage;
+
+import java.util.List;
+import java.util.Map;
+
+public class FindBooksByAuthor {
+
+    private final Map<String, List<String>> booksByAuthor;
+
+    public FindBooksByAuthor(Map<String, List<String>> booksByAuthor) {
+        this.booksByAuthor = booksByAuthor;
+    }
+
+    public Scene createAuthorScene(Stage primaryStage, Scene dashboardScene, RecommendationApp app) {
+        Label authorLabel = new Label("Select Author:");
+        ComboBox<String> authorComboBox = new ComboBox<>();
+        authorComboBox.getItems().addAll(booksByAuthor.keySet());
+
+        Button authorSearchButton = new Button("Search");
+        ListView<HBox> authorBookListView = new ListView<>();
+        Button authorBackButton = new Button("Home");
+
+        VBox authorLayout = new VBox(10, authorLabel, authorComboBox, authorSearchButton, authorBookListView, authorBackButton);
+        authorLayout.setPadding(new Insets(20));
+        authorLayout.setStyle("-fx-background-color: #9A7DFF;");
+
+        authorSearchButton.setOnAction(e -> {
+            String selectedAuthor = authorComboBox.getValue();
+            if (selectedAuthor != null) {
+                List<HBox> items = app.createBookItems(booksByAuthor.get(selectedAuthor));
+                authorBookListView.getItems().setAll(items);
+            }
+        });
+
+        authorBackButton.setOnAction(e -> primaryStage.setScene(dashboardScene));
+
+        return new Scene(authorLayout, 400, 500);
+    }
+}
